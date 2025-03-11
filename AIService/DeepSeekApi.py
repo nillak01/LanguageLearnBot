@@ -1,9 +1,20 @@
 from openai import OpenAI
-from config_data.config import load_DS_config
+from environs import Env
+import logging
 
-ds = load_DS_config()
 
-client = OpenAI(api_key=ds.api_key, base_url="https://api.deepseek.com")
+env: Env = Env()
+logger = logging.getLogger(__name__)
+
+try:
+    # Добавляем в переменное окружение данные из .env
+    env.read_env(path=None)
+    api_key=env('DEEP_SEEK_API')
+
+except Exception:
+    logger.error("Cant read env")
+
+client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
 
 response = client.chat.completions.create(
     model="deepseek-chat",
