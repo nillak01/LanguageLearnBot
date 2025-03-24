@@ -1,11 +1,12 @@
 from aiogram import Router
 from aiogram.types import Message
 from lexicon.lexicon_ru import LEXICON_RU
+from AIService.DeepSeekApi import speak
 
-router = Router()
+other_router = Router()
 
 
 # Хэндлер для сообщений, которые не попали в другие хэндлеры
-@router.message()
-async def send_answer(message: Message):
-    await message.answer(text=LEXICON_RU['other_answer'])
+@other_router.message()
+async def send_answer(message: Message, dpseek_api):
+    await message.answer(message.text)

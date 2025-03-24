@@ -5,8 +5,13 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from config_data.config import Config, load_config
-from handlers import other_handlers, user_handlers
+from handlers.other import other_router
+from handlers.admin import admin_router
+from handlers.user import user_router
 from keyboards.set_menu import set_main_menu
+from middlewares.outer import (
+    AdminCheckMiddleware
+)
 
 
 # Инициализируем логгер
@@ -33,13 +38,18 @@ async def main():
         default=DefaultBotProperties(parse_mode=ParseMode.HTML)
     )
     dp = Dispatcher()
+    dp.workflow_data.update({'db_url': config.db_url, 'dpseek_api': config.dpseek_api, 'admins': config.tg_bot.admin_ids})
 
     # Настраиваем кнопку Menu
     await set_main_menu(bot)
 
     # Регистриуем роутеры в диспетчере
-    dp.include_router(user_handlers.router)
-    dp.include_router(other_handlers.router)
+    dp.include_router(admin_router)
+    dp.include_router(user_router)
+    dp.include_router(other_router)
+
+    # Здесь будем регистрировать миддлвари
+    admin_router.message.outer_middleware(AdminCheckMiddleware())
 
     # Регистрируем асинхронную функцию в диспетчере,
     # которая будет выполняться на старте бота,
@@ -47,7 +57,7 @@ async def main():
 
     # Пропускаем накопившиеся апдейты и запускаем polling
     await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot)
+    await dp.start_polling(bot, _admins_list=config.tg_bot.admin_ids)
 
 
 asyncio.run(main())

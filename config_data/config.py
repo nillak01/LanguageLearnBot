@@ -9,15 +9,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-@dataclass
-class DeepSeekConfig:
-    api_key: str
-
-
-@dataclass
-class DatabaseConfig:
-    db_url: str
-
 
 @dataclass
 class TgBot:
@@ -28,7 +19,8 @@ class TgBot:
 @dataclass
 class Config:
     tg_bot: TgBot
-    db: DatabaseConfig
+    db_url: str
+    dpseek_api: str
 
 
 def load_config(path: str | None = None):
@@ -46,26 +38,10 @@ def load_config(path: str | None = None):
                 token=env('BOT_TOKEN'),
                 admin_ids=list(map(int, (env.list('ADMIN_ID'))))
             ),
-            db=DatabaseConfig(
-                db_url=env('DB_URL')
-            )
+            db_url=env('DB_URL'),
+            dpseek_api=env('DEEP_SEEK_API')
+
         )
     except Exception:
         logger.error("Cant read env")
 
-
-def load_DS_config(path: str | None = None):
-    # Создаем эксемпляр класса Env
-    env: Env = Env()
-
-    # Пробуем загрузить данные из .env
-    try:
-        # Добавляем в переменное окружение данные из .env
-        env.read_env(path)
-
-        # Возвращаем созданный эксемпляр класса Config
-        return DeepSeekConfig(
-                api_key=env('DEEP_SEEK_API')
-        )
-    except Exception:
-        logger.error("Cant read env")

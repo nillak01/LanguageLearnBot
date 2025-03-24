@@ -28,3 +28,10 @@ def get_winner(user_choice: str | None, bot_choice: str) -> str:
     elif rules[user_choice] == bot_choice:
         return 'user_won'
     return 'bot_won'
+
+
+# Функция общения с DeepSeek
+def speak_to_assistance():
+    
+    while True:
+        pass

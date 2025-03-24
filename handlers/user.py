@@ -6,7 +6,7 @@ from keyboards.inline_keyboards import create_inline_kb
 from lexicon.lexicon_ru import LEXICON_RU, BUTTONS
 from services.services import get_bot_choice, get_winner
 
-router = Router()
+user_router = Router()
 
 
 # Этот хэндлер срабатывает на команду /start
@@ -27,7 +27,7 @@ router = Router()
 
 # Этот хэндлер будет срабатывать на команду "/start"
 # и отправлять в чат клавиатуру
-@router.message(CommandStart())
+@user_router.message(CommandStart())
 async def process_start_command(message: Message):
     keyboard = create_inline_kb(4, **BUTTONS)
     await message.answer(
@@ -38,31 +38,38 @@ async def process_start_command(message: Message):
 
 
 # Этот хэндлер срабатывает на команду /help
-@router.message(Command(commands='help'))
+@user_router.message(Command(commands='help'))
 async def process_help_command(message: Message):
     await message.answer(text=LEXICON_RU['/help'], reply_markup=yes_no_kb)
 
 
-# Этот хэндлер срабатывает на команду /help
-@router.message(Command(commands='contacts'))
+# Этот хэндлер срабатывает на команду /contacts
+@user_router.message(Command(commands='contacts'))
 async def process_contacts_command(message: Message):
     await message.answer(text=LEXICON_RU['/contacts'])
 
 
+# Этот хэндлер срабатывает на команду /assistant
+@user_router.message(Command(commands='assistant'))
+async def process_assistant(message: Message):
+    await message.answer(text=LEXICON_RU['/assistant'])
+    await message.answer(text=LEXICON_RU['/assistant'])
+
+
 # Этот хэндлер срабатывает на согласие пользователя играть в игру
-@router.message(F.text == LEXICON_RU['yes_button'])
+@user_router.message(F.text == LEXICON_RU['yes_button'])
 async def process_yes_answer(message: Message):
     await message.answer(text=LEXICON_RU['yes'], reply_markup=game_kb)
 
 
 # Этот хэндлер срабатывает на отказ пользователя играть в игру
-@router.message(F.text == LEXICON_RU['no_button'])
+@user_router.message(F.text == LEXICON_RU['no_button'])
 async def process_no_answer(message: Message):
     await message.answer(text=LEXICON_RU['no'])
 
 
 # Этот хэндлер срабатывает на любую из игровых кнопок
-@router.message(F.text.in_([LEXICON_RU['rock'],
+@user_router.message(F.text.in_([LEXICON_RU['rock'],
                             LEXICON_RU['paper'],
                             LEXICON_RU['scissors']]))
 async def process_game_button(message: Message):
@@ -75,7 +82,7 @@ async def process_game_button(message: Message):
 
 # Этот хэндлер будет срабатывать на апдейт типа CallbackQuery
 # с data 'big_button_1_pressed'
-@router.callback_query(F.data == 'big_button_1_pressed')
+@user_router.callback_query(F.data == 'big_button_1_pressed')
 async def process_button_1_press(callback: CallbackQuery):
     if callback.message.text != 'Была нажата БОЛЬШАЯ КНОПКА 1':
         await callback.message.edit_text(
@@ -90,7 +97,7 @@ async def process_button_1_press(callback: CallbackQuery):
 
 # Этот хэндлер будет срабатывать на апдейт типа CallbackQuery
 # с data 'big_button_2_pressed'
-@router.callback_query(F.data == 'big_button_2_pressed')
+@user_router.callback_query(F.data == 'big_button_2_pressed')
 async def process_button_2_press(callback: CallbackQuery):
     if callback.message.text != 'Была нажата БОЛЬШАЯ КНОПКА 2':
         await callback.message.edit_text(
