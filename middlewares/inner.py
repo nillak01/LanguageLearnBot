@@ -7,7 +7,7 @@ from aiogram.types import TelegramObject
 logger = logging.getLogger(__name__)
 
 
-class IsAdminMiddleware(BaseMiddleware):
+class FirstInnerMiddleware(BaseMiddleware):
 
     async def __call__(
         self,

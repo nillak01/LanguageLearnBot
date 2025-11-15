@@ -57,54 +57,54 @@ async def process_assistant(message: Message):
 
 
 # Этот хэндлер срабатывает на согласие пользователя играть в игру
-@user_router.message(F.text == LEXICON_RU['yes_button'])
-async def process_yes_answer(message: Message):
-    await message.answer(text=LEXICON_RU['yes'], reply_markup=game_kb)
+# @user_router.message(F.text == LEXICON_RU['yes_button'])
+# async def process_yes_answer(message: Message):
+#     await message.answer(text=LEXICON_RU['yes'], reply_markup=game_kb)
 
 
 # Этот хэндлер срабатывает на отказ пользователя играть в игру
-@user_router.message(F.text == LEXICON_RU['no_button'])
-async def process_no_answer(message: Message):
-    await message.answer(text=LEXICON_RU['no'])
+# @user_router.message(F.text == LEXICON_RU['no_button'])
+# async def process_no_answer(message: Message):
+#     await message.answer(text=LEXICON_RU['no'])
 
 
 # Этот хэндлер срабатывает на любую из игровых кнопок
-@user_router.message(F.text.in_([LEXICON_RU['rock'],
-                            LEXICON_RU['paper'],
-                            LEXICON_RU['scissors']]))
-async def process_game_button(message: Message):
-    bot_choice = get_bot_choice()
-    await message.answer(text=f'{LEXICON_RU["bot_choice"]} '
-                              f'- {LEXICON_RU[bot_choice]}')
-    winner = get_winner(message.text, bot_choice)
-    await message.answer(text=LEXICON_RU[winner], reply_markup=yes_no_kb)
+# @user_router.message(F.text.in_([LEXICON_RU['rock'],
+#                             LEXICON_RU['paper'],
+#                             LEXICON_RU['scissors']]))
+# async def process_game_button(message: Message):
+#     bot_choice = get_bot_choice()
+#     await message.answer(text=f'{LEXICON_RU["bot_choice"]} '
+#                               f'- {LEXICON_RU[bot_choice]}')
+#     winner = get_winner(message.text, bot_choice)
+#     await message.answer(text=LEXICON_RU[winner], reply_markup=yes_no_kb)
 
 
 # Этот хэндлер будет срабатывать на апдейт типа CallbackQuery
 # с data 'big_button_1_pressed'
-@user_router.callback_query(F.data == 'big_button_1_pressed')
-async def process_button_1_press(callback: CallbackQuery):
-    if callback.message.text != 'Была нажата БОЛЬШАЯ КНОПКА 1':
-        await callback.message.edit_text(
-            text='Была нажата БОЛЬШАЯ КНОПКА 1',
-            reply_markup=callback.message.reply_markup
-        )
-    else:
-        await callback.answer(text='БОЛЬШАЯ КНОПКА 1 нажата')
-    await callback.answer(text='БОЛЬШАЯ КНОПКА 1',
-                          show_alert=True)
+# @user_router.callback_query(F.data == 'big_button_1_pressed')
+# async def process_button_1_press(callback: CallbackQuery):
+#     if callback.message.text != 'Была нажата БОЛЬШАЯ КНОПКА 1':
+#         await callback.message.edit_text(
+#             text='Была нажата БОЛЬШАЯ КНОПКА 1',
+#             reply_markup=callback.message.reply_markup
+#         )
+#     else:
+#         await callback.answer(text='БОЛЬШАЯ КНОПКА 1 нажата')
+#     await callback.answer(text='БОЛЬШАЯ КНОПКА 1',
+#                           show_alert=True)
 
 
 # Этот хэндлер будет срабатывать на апдейт типа CallbackQuery
 # с data 'big_button_2_pressed'
-@user_router.callback_query(F.data == 'big_button_2_pressed')
-async def process_button_2_press(callback: CallbackQuery):
-    if callback.message.text != 'Была нажата БОЛЬШАЯ КНОПКА 2':
-        await callback.message.edit_text(
-            text='Была нажата БОЛЬШАЯ КНОПКА 2',
-            reply_markup=callback.message.reply_markup
-        )
-    else:
-        await callback.answer(text='БОЛЬШАЯ КНОПКА 2 уже нажата')
-    await callback.answer(text='БОЛЬШАЯ КНОПКА 2 уже нажата',
-                          show_alert=True)
+# @user_router.callback_query(F.data == 'big_button_2_pressed')
+# async def process_button_2_press(callback: CallbackQuery):
+#     if callback.message.text != 'Была нажата БОЛЬШАЯ КНОПКА 2':
+#         await callback.message.edit_text(
+#             text='Была нажата БОЛЬШАЯ КНОПКА 2',
+#             reply_markup=callback.message.reply_markup
+#         )
+#     else:
+#         await callback.answer(text='БОЛЬШАЯ КНОПКА 2 уже нажата')
+#     await callback.answer(text='БОЛЬШАЯ КНОПКА 2 уже нажата',
+#                           show_alert=True)

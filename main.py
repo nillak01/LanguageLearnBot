@@ -10,7 +10,11 @@ from handlers.admin import admin_router
 from handlers.user import user_router
 from keyboards.set_menu import set_main_menu
 from middlewares.outer import (
-    AdminCheckMiddleware
+    AdminCheckMiddleware,
+    FirstOuterMiddleware
+)
+from middlewares.inner import (
+    FirstInnerMiddleware
 )
 
 
@@ -44,11 +48,12 @@ async def main():
     await set_main_menu(bot)
 
     # Регистриуем роутеры в диспетчере
-    dp.include_router(admin_router)
     dp.include_router(user_router)
+    dp.include_router(admin_router)
     dp.include_router(other_router)
 
     # Здесь будем регистрировать миддлвари
+    user_router.message.outer_middleware(FirstOuterMiddleware())
     admin_router.message.outer_middleware(AdminCheckMiddleware())
 
     # Регистрируем асинхронную функцию в диспетчере,
