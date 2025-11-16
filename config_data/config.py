@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from typing import List, Optional 
+from typing import List, Optional, Union
 from environs import Env
 import logging
+
 
 logging.basicConfig(
     level='INFO'
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class TgBot:
     token: str            # Токен для доступа к телеграм-боту
-    # admin_ids: list[int]  # Список id администраторов бота
+    admin_ids: list[int]  # Список id администраторов бота
 
 
 @dataclass
@@ -24,7 +25,7 @@ class Config:
     dpseek_api: str
 
 
-def load_config(path: str | None = None):
+def load_config(path: Optional[str] = None):
     # Создаем эксемпляр класса Env
     env: Env = Env()
 

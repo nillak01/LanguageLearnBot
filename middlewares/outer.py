@@ -19,10 +19,17 @@ class AdminCheckMiddleware(BaseMiddleware):
             'Вошли в миддлварь %s, тип события %s',
             __class__.__name__,
             event.__class__.__name__
+
         )
 
         user: User = data.get('event_from_user')
         idmins_list = data.get('_admins_list')
+
+        logger.info(
+            'Вот id',
+            user.id
+
+        )
 
         if user is not None:
             if user.id in idmins_list:
@@ -48,7 +55,8 @@ class FirstOuterMiddleware(BaseMiddleware):
         logger.debug(
             'Вошли в миддлварь %s, тип события %s',
             __class__.__name__,
-            event.__class__.__name__
+            event.__class__.__name__,
+            data.__class__.__name__
         )
 
         result = await handler(event, data)
