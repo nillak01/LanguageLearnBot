@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import List, Optional 
 from environs import Env
 import logging
 
@@ -13,7 +14,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class TgBot:
     token: str            # Токен для доступа к телеграм-боту
-    admin_ids: list[int]  # Список id администраторов бота
+    # admin_ids: list[int]  # Список id администраторов бота
 
 
 @dataclass
@@ -44,4 +45,3 @@ def load_config(path: str | None = None):
         )
     except Exception:
         logger.error("Cant read env")
-
